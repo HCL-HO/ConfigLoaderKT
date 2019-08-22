@@ -1,4 +1,4 @@
-package config
+package com.eh.kotlin.config
 
 import java.io.*
 import java.util.Properties
@@ -15,12 +15,20 @@ object ConfigLoader {
 //        }
 //    }
 
+    fun initPropFile(keys: Array<String>, path: String = "config.properties") {
+        val config = Config(path)
+        for (key in keys) {
+            config.setProp(key, "")
+        }
+        config.save()
+    }
+
     operator fun get(path: String): Config {
         return Config(path)
     }
 
     class Config(private val path: String) {
-        private val prop: Properties?
+        private var prop: Properties? = Properties()
 
         init {
             prop = loadProp(path)
@@ -49,7 +57,7 @@ object ConfigLoader {
 
         }
 
-        fun loadProp(path: String): Properties? {
+        private fun loadProp(path: String): Properties? {
             //            try (InputStream input = ConfigLoader.class.getClassLoader().getResourceAsStream(path)) {
             try {
                 FileInputStream(path).use { input ->
