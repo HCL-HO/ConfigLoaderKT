@@ -1,4 +1,4 @@
-package com.eh.kotlin.config
+package ConfigLoaderKT
 
 import java.io.*
 import java.util.Properties
@@ -28,25 +28,29 @@ object ConfigLoader {
     }
 
     class Config(private val path: String) {
-        private var prop: Properties? = Properties()
+        private var prop: Properties = Properties()
 
         init {
             prop = loadProp(path)
         }
 
-        fun readProp(): Properties? {
+        fun readProp(): Properties {
             return this.prop
         }
 
+        fun getProp(key: String): String {
+            return this.prop.getProperty(key)
+        }
+
         fun setProp(key: String, `val`: String): Config {
-            this.prop!!.setProperty(key, `val`)
+            this.prop.setProperty(key, `val`)
             return this
         }
 
         fun save(): Boolean {
             try {
                 FileOutputStream(path).use { output ->
-                    prop!!.store(output, null)
+                    prop.store(output, null)
                     println(prop)
                     return true
                 }
@@ -57,7 +61,7 @@ object ConfigLoader {
 
         }
 
-        private fun loadProp(path: String): Properties? {
+        private fun loadProp(path: String): Properties {
             //            try (InputStream input = ConfigLoader.class.getClassLoader().getResourceAsStream(path)) {
             try {
                 FileInputStream(path).use { input ->
@@ -67,7 +71,7 @@ object ConfigLoader {
                 }
             } catch (ex: IOException) {
                 ex.printStackTrace()
-                return null
+                return Properties()
             }
 
         }
