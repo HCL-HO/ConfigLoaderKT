@@ -1,4 +1,4 @@
-package ConfigLoaderKT
+package com.eh.kotlin.configloaderkt
 
 import java.io.*
 import java.util.Properties
